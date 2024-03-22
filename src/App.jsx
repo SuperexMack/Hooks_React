@@ -4,38 +4,55 @@ import viteLogo from '/vite.svg'
 // import './App.css'
 
 function App() {
-
-   const [todos , setTODO] = useState([])
   
-  useEffect(()=>{
-    fetch("https://sum-server.100xdevs.com/todos")
-    .then((async (res)=>{
-      const json = await res.json()
-      setTODO(json.todos)
-    }))
-  } , [])
+  const [counter , todochanger] = useState(1)
 
-
-  // using useEffect we stop the program to run infinitely we make to run the program to our choise
-  // if dependency in useEffect is just empty i.e [] so the program will run only once
-
-  return (
-    <>
-      {todos.map(todo=>
-       <TODO key={todo.id} title={todo.title} description={todo.description}></TODO>
-      )}
-    </>
-  )
-}
-
-
-function TODO({title , description}){
+  let count;
   return(
     <>
-  <h1>{title}</h1>
-  <h1>{description}</h1>
-  </>
+    <button onClick={()=>todochanger(1)}>1</button>
+    <button onClick={()=>todochanger(2)}>2</button>
+    <button onClick={()=>todochanger(3)}>3</button>
+    <button onClick={()=>todochanger(4)}>4</button>
+    <button onClick={()=>todochanger(5)}>5</button>
+    <TODO id={counter}></TODO>
+    </>
   )
+
+
+}
+
+function TODO({id}){
+const [todo , setTODO] = useState({})
+
+// write your useEffect logic here
+
+useEffect(()=>{
+
+fetch("https://sum-server.100xdevs.com/todo?id=" + id)
+.then(async(res)=>{
+  const json = await res.json(); 
+  setTODO(json.todo)
+})
+
+} , [todo])
+
+
+return(
+
+<>
+
+id:{id}
+<h1>{todo.title}</h1>
+<h4>{todo.description}</h4>
+
+</>
+
+
+
+)
+
+
 }
 
 export default App
